@@ -1,0 +1,84 @@
+digraph G {
+    style=bold;
+    label="Pôle découverte"
+    fontsize = 20
+    labelfloat = True
+
+    subgraph cluster_geo {
+        label = "Pôle Géo";
+        color = green;
+        fontsize = 15
+
+        subgraph cluster_geo_prod {
+            label = "Production";
+            color = blue;
+
+
+            "connect0001" [shape=rectangle,style=filled,label="",height=.1,width=.4] ;
+            geofr1  -> "connect0001" [ dir=none, weight=1 ] ;
+            geofr2  -> "connect0001" [ dir=none, weight=1 ] ;
+            "connect0001" -> geobdd1 [ dir=none, fontsize = 10, label = "sql" ]
+            #geofr1 -> geobdd1 [ penwidth = 1, fontsize = 10, label = "sql" ]
+            #geofr2 -> geobdd1 [ penwidth = 1, fontsize = 10, label = "sql" ]
+            geobdd1 -> geobdd2 [ dir=none, fontsize = 10, color=red, label = "répli sql" ]
+
+            subgraph cluster_geo_prod_fr {
+                label = "prod (vlan 10)";
+                geofr1 [ shape = box3d ] 
+                geofr2 [ shape = box3d ]
+            }
+
+            subgraph cluster_geo_prod_bdd {
+                label = "prod bdd (vlan 11)";
+                geobdd1 [ shape = box3d ]
+                geobdd2 [ shape = box3d ]
+            }
+        }
+
+
+         subgraph cluster_geo_preprod {
+            label = "Préproduction (vlan 12)";
+            color = red;
+            geofr3 -> geobdd3;
+        }
+    }
+
+    subgraph cluster_cpg {
+        label = "Pôle CPG";
+        color = green;
+        fontsize = 15
+
+        subgraph cluster_cpg_prod {
+            label = "Production";
+            color = blue;
+
+            cpgfr1 -> cpgbdd1 [ penwidth = 1, fontsize = 10, label = "sql" ]
+            cpgfr2 -> cpgbdd1 [ penwidth = 1, fontsize = 10, label = "sql" ]
+            cpgfr3 -> cpgbdd1 [ penwidth = 1, fontsize = 10, label = "sql" ]
+            cpgfr4 -> cpgbdd1 [ penwidth = 1, fontsize = 10, label = "sql" ]
+            cpgbdd1 -> cpgbdd2 [ penwidth = 1, fontsize = 10, color=red, label = "répli sql" ]
+
+            subgraph cluster_cpg_prod_fr {
+                label = "production (vlan 20) ";
+                cpgfr1 [ shape = box3d ]
+                cpgfr2 [ shape = box3d ]
+                cpgfr3 [ shape = box3d ]
+                cpgfr4 [ shape = box3d ]
+            }
+
+            subgraph cluster_cpg_prod_bdd {
+                label = "production bdd (vlan 21)";
+                cpgbdd1;
+                cpgbdd2;
+            }
+        }
+
+
+         subgraph cluster_cpg_preprod {
+            label = "Préproduction (vlan 22)";
+            color = red;
+            cpgfr5 -> cpgbdd3
+        }
+    }
+
+}
